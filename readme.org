@@ -1,0 +1,27 @@
+* About
+
+WIP - don't use.
+
+When I use if-let, when-let, while-let I percieve it can be a bit too noisy with all the parenthesis involved. What if we could make it slightly less noisy? Is it worth? Consider typical `let' form:
+
+#+begin_src emacs-lisp
+(let ((var1 (form1))
+      (var2 (form2))
+      ...
+      (varN (formN)))
+  ....)
+#+end_src
+
+Each binding in the lambda list is a pair. If we remove the parenthesis around each pair we get a property list similar as is used by setq/setf:
+
+#+begin_src emacs-lisp
+(let (var1 (form1)
+      var2 (form2)
+      ...
+      varN (formN))
+  ....)
+#+end_src
+
+It does not seem like much, but I find it a bit less noisy too look at. The cons is that one can't have trivially a single expression of form (if-let some-var do-this do-that), but that form is reduced to simple if, so it is not very interesting to have it either.
+
+I call let* with "plist-like" lambda list for "lex", and if-lex, when-lex and while-lex are meant to be if-let*, when-let* and while-let*.
