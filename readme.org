@@ -8,7 +8,7 @@ Currently not yet available in other form but from the git repository.
 Just dump `lex-bindings.el` in your load path somewhere, use package-install-vc,
 or some installer of your choice.
 
-* Examples Functions
+* How does it looks like?
 
 #+begin_src emacs-lisp :tangle yes
 (lex (x 1
@@ -16,12 +16,12 @@ or some installer of your choice.
       z 3)
   (list x y z)) => (list 1 2 3)
 
+
 (lex-if (x 1
          y (1+ x)
-         z (< x y))
-  y
-  (setq x (1+ y))
-  x) => 2
+         z (> x y))
+  (message "than part")
+  (message "else part")) => else part
 
 (lex-when (x t
            y t
@@ -32,25 +32,19 @@ or some installer of your choice.
             run t)
   (setq x (1- x))
   (when (< x 5)
-    (setq run nil))
-  x) => nil
-
-(let (new)
-  (lex-while (l '(1 2 3))
-    (push (pop l) new))
-  new) => (list 3 2 1)
+    (setq run nil))) => nil
 
 (let ((s "no-run"))
   (lex-while (x (> 1 2))
     (setq s "I run!"))
-  s) => "no-run"))
-
+  s) => "no-run"
 #+end_src
 
 
 * What it does?
 
-When I use if-let, when-let, while-let I percieve it can be a bit too noisy with all the parenthesis involved. What if we could make it slightly less noisy? Is it worth? Consider typical `let' form:
+When I use let, if-let, when-let and while-let I percieve it can be a bit noisy with all the parenthesis involved. I wantd to
+experiment and see if it is a bit better if we let-form was written as setq/setf. Consider:
 
 #+begin_src emacs-lisp
 (let ((var1 (form1))
@@ -70,21 +64,18 @@ Each binding in the lambda list is a pair. If we remove the parenthesis around e
   ....)
 #+end_src
 
-Each binding in the lambda list is a pair. If we remove the parenthesis around each pair we get a property list similar as is used by setq/setf:
-
-It does not seem like much, but I find it a bit less noisy too look at. The cons is that one can't have trivially a single expression of form (if-let some-var do-this do-that), but that form is reduced to simple if, so it is not very
-interesting to have it either.
+It does not seem like much, but I find it is a bit less noisy too look at. The cons is that one can't have trivially a single expression of form (if-let some-var do-this do-that), but that form is reduced to simple if, so it is not very
+interesting for if-let cover that use-case either.
 
 I call it for 'lex', as shorter of 'lexical environment', and it is also close to 'let'. I don't have a better name, unfortunately.
 
-I have certainly nothing against parethesis in Lisp, on the contrary. However, sometimes it can be a bit too many. This little library tests slightly different syntax for let, if-let, when-let and while-let. The idea is to use pairs as they
-are used in setq and setf forms, which at least slightly reduces parenthesis..
+T note is, I have certainly nothing against parethesis in Lisp, on the contrary. However, if things can be simplified, why not?
 
-As a gotcha, you have to use bindings in pairs. It means, that uninitialized bindings must be set to nil explicitly. It is more visible in lex-if, lex-when and lex-while, where you have to assign the value of the predicate to a variable. But in the simplest case we can just use ordinary if, when and while.
+The cost at runtime is virtually none, they are extremely thin wrapper over let, if, when and while forms from EmacsLisp. I use let* for all of those on the purpose. It is though trivial to have both non-star and star-forms if desired.
 
 * Acknowledgements
 
-I am using test code by S. Magnar from s.el. I think it is really awesome addition to vanilla ert framework.
+I am using test code by S. Magnar from s.el. I think his test stuff is really awesome addition to vanilla Ert framework included in Emacs.
 
 * Contribute
 

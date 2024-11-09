@@ -118,7 +118,7 @@ effect."
          (variables (mapcar #'car bindings)))
         `(let* ,bindings
            (while (and ,@variables)
-             ,@body))))
+             (progn ,@body)))))
 
 (put 'lex 'lisp-indent-function '(&lambda &body))
 (put 'lex-if 'lisp-indent-function '(&lambda &body))
