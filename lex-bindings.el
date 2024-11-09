@@ -1,4 +1,4 @@
-;;; lex.el --- Few utils to work with lexical scope  -*- lexical-binding: t; -*-
+;;; lex-bindings.el --- Few utils to work with lexical scope  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2024  Arthur Miller
 
@@ -47,7 +47,7 @@ the variables are bound to the corresponding values.
 
 Expands to `let*'."
   (declare (indent defun))
-  `(let* ,(lex--lambda-list varlist)
+  `(let* ,(lex--lambda-list varlist 'lex)
      ,@body))
 
 (defmacro lex-if (varlist then-form &rest else-forms)
@@ -121,6 +121,9 @@ effect."
              ,@body))))
 
 (put 'lex 'lisp-indent-function '(&lambda &body))
+(put 'lex-if 'lisp-indent-function '(&lambda &body))
+(put 'lex-when 'lisp-indent-function '(&lambda &body))
+(put 'lex-while 'lisp-indent-function '(&lambda &body))
 
-(provide 'lex)
-;;; lex.el ends here
+(provide 'lex-bindings)
+;;; lex-bindings.el ends here
