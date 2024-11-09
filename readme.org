@@ -43,8 +43,8 @@ or some installer of your choice.
 
 * What it does?
 
-When I use let, if-let, when-let and while-let I percieve it can be a bit noisy with all the parenthesis involved. I wantd to
-experiment and see if it is a bit better if we let-form was written as setq/setf. Consider:
+When I use let, if-let, when-let and while-let I percieve it can be a bit noisy with all the parenthesis involved. I wanted to
+experiment and see if it is a bit better if let-form was written more like setq/setf. Consider:
 
 #+begin_src emacs-lisp
 (let ((var1 (form1))
@@ -65,13 +65,14 @@ Each binding in the lambda list is a pair. If we remove the parenthesis around e
 #+end_src
 
 It does not seem like much, but I find it is a bit less noisy too look at. The cons is that one can't have trivially a single expression of form (if-let some-var do-this do-that), but that form is reduced to simple if, so it is not very
-interesting for if-let cover that use-case either.
+interesting for if-let to cover that use-case either.
 
 I call it for 'lex', as shorter of 'lexical environment', and it is also close to 'let'. I don't have a better name, unfortunately.
 
-T note is, I have certainly nothing against parethesis in Lisp, on the contrary. However, if things can be simplified, why not?
+To note is, I have certainly nothing against parethesis in Lisp, on the contrary. However, if things can be simplified, why not?
 
-The cost at runtime is virtually none, they are extremely thin wrapper over let, if, when and while forms from EmacsLisp. I use let* for all of those on the purpose. It is though trivial to have both non-star and star-forms if desired.
+The cost at runtime is none, since they are macros. Also, they are extremely simple wrappers over let, if, when and while forms from EmacsLisp. I use let* for all of those on the purpose. It is though trivial to have both non-star and
+star-forms if desired.
 
 * Acknowledgements
 
