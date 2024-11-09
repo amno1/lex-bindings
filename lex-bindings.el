@@ -114,12 +114,13 @@ the variables are bound to the corresponding values.
 If all variables were bound to true values, the THEN-FORM is executed with the
 bindings in effect, otherwise the ELSE-FORM is executed with the bindings in
 effect."
-  (declare (indent defun))
   (let* ((bindings (lex--lambda-list varlist 'lex-while))
          (variables (mapcar #'car bindings)))
         `(let* ,bindings
            (while (and ,@variables)
              ,@body))))
+
+(put 'lex 'lisp-indent-function '(&lambda &body))
 
 (provide 'lex)
 ;;; lex.el ends here
